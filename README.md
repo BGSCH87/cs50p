@@ -8,4 +8,5 @@ Na het afronden van **CS50x**, is dit mijn repository voor de CS50P cursus op ed
 - [x] Week 3:
 - [x] Week 4:
 - [x] Week 5:
-...
+- [x] Week 6:
+- [x] Week 7:
