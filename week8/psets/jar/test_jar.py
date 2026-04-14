@@ -1,4 +1,4 @@
-from jar import Jar
+from cs50p.week8.psets.jar.jar import Jar
 
 
 def test_init():
