@@ -39,14 +39,14 @@ class Jar:
 def main():
     try:
         jar = Jar(12)
-        print(f"Empty Jar: {jar}")
+        print(f"Empty Jar capacity: {jar.capacity}, size: {jar.size}")
         
-        jar.deposit(5)
+        jar.deposit(12)
         print(f"After deposit: {jar}")
         
-        # This will now be caught by our custom error message
-        jar.withdraw(2) 
+        jar.withdraw(11) 
         print(f"After withdrawal: {jar}")
+        print("cookie.gif")
         
     except ValueError as e:
         print(f"Error: {e}")
