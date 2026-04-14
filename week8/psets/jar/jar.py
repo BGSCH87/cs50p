@@ -1,3 +1,6 @@
+import os
+import webbrowser
+
 class Jar:
     def __init__(self, capacity=12):
         self.capacity = capacity
@@ -12,8 +15,18 @@ class Jar:
     def withdraw(self, n):
         if n > self.size:
             raise ValueError("Not enough cookies in the jar!")
+        self.open_cookie_gif()
         self.size -= n
-
+    def open_cookie_gif(self):
+        # Make sure 'cookie.gif' is in the same folder as your script!
+        file_path = "cookie.gif"
+        
+        if os.path.exists(file_path):
+            # This opens the GIF in your default browser or image viewer
+            webbrowser.open(os.path.abspath(file_path))
+        else:
+            print(f"(Image {file_path} not found, but you ate {n} cookies!)")
+        
     @property
     def capacity(self):
         return self._capacity

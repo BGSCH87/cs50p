@@ -1,3 +1,4 @@
+import pytest
 from jar import Jar
 
 
@@ -19,6 +20,12 @@ def test_deposit():
     jar = Jar()
     jar.deposit(1)
     assert str(jar) == "🍪"
+
+def test_over_deposit():
+    jar = Jar(12)
+    # This is the "trap"
+    with pytest.raises(ValueError):
+        jar.deposit(15)  # This should trigger the @size.setter error
 
 def test_withdraw():
     jar = Jar()
