@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLog - Mijn Persoonlijke Film Tracker</title>
+    <!-- We gebruiken een clean modern lettertype en CSS via een CDN voor snelle styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        body { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .search-container { position: relative; margin-bottom: 40px; }
+        #search-input { width: 100%; padding: 12px; font-size: 16px; border-radius: 8px; }
+        .search-results { 
+            position: absolute; width: 100%; max-height: 400px; overflow-y: auto;
+            background: #202b36; border-radius: 0 0 8px 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            z-index: 10; display: none; padding: 0; list-style: none;
+        }
+        .search-results li a { 
+            display: flex; align-items: center; padding: 10px; text-decoration: none; color: #fff;
+            border-bottom: 1px solid #2e3c4a;
+        }
+        .search-results li a:hover { background: #2e3c4a; }
+        .search-results img { width: 40px; height: 60px; object-fit: cover; margin-right: 15px; border-radius: 4px; }
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .movie-card { background: #202b36; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .movie-card img { width: 100%; height: 280px; object-fit: cover; border-radius: 6px; }
+        .stars { color: #ffca28; font-size: 18px; margin: 5px 0; }
+        .date { font-size: 12px; color: #8899a6; }
+    </style>
+</head>
+<body>
+
+    <h1>🎬 CineLog</h1>
+    <p>Mijn eigen IMDb tracker. Zoek live naar films en voeg ze toe aan het logboek.</p>
+
+    <!-- LIVE SEARCH ELEMENTEN -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Typ minimaal 3 letters om live films te zoeken..." autocomplete="off">
+        <ul id="search-results" class="search-results"></ul>
+    </div>
+
+    <hr>
+
+    <h2>📅 Mijn Bekeken Films</h2>
+    <!-- FILTER DROPDOWN -->
+<form method="GET" action="/" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+    <label for="filter_rating" style="margin: 0;">Filter op waardering:</label>
+    <select name="filter_rating" id="filter_rating" onchange="this.form.submit()" style="width: auto; margin: 0;">
+        <option value="all" {% if current_filter == 'all' %}selected{% endif %}>Alles tonen</option>
+        <option value="5" {% if current_filter == '5' %}selected{% endif %}>⭐⭐⭐⭐⭐</option>
+        <option value="4" {% if current_filter == '4' %}selected{% endif %}>⭐⭐⭐⭐</option>
+        <option value="3" {% if current_filter == '3' %}selected{% endif %}>⭐⭐⭐</option>
+        <option value="2" {% if current_filter == '2' %}selected{% endif %}>⭐⭐</option>
+        <option value="1" {% if current_filter == '1' %}selected{% endif %}>⭐</option>
+    </select>
+</form>
+    {% if movies %}
+        <div class="movie-grid">
+            {% for movie in movies %}
+                <div class="movie-card">
+                    <img src="{{ movie.poster if movie.poster != 'N/A' else 'https://via.placeholder.com/300x450?text=Geen+Poster' }}" alt="{{ movie.title }}">
+                    <h3>{{ movie.title }}</h3>
+                    <p class="date">Bekeken op: {{ movie.date_watched }}</p>
+                    <div class="stars">
+                        {% for i in range(movie.my_rating) %}★{% endfor %}
+                        {% for i in range(5 - movie.my_rating) %}☆{% endfor %}
+                    </div>
+                    <p style="font-size: 14px;">({{ movie.year }}) • {{ movie.runtime }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Je hebt nog geen films toegevoegd. Gebruik de zoekbalk hierboven om je eerste film te loggen!</p>
+    {% endif %}
+
+    <!-- JavaScript koppeling voor de Live Search functionaliteit -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

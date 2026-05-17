@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.Title }} - CineLog Detail</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .movie-detail-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .movie-poster {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .movie-info {
+            flex: 2;
+        }
+
+        .meta-tag {
+            background: #2e3c4a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .rating-box {
+            background: #202b36;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            border: 1px solid #3b4b5a;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/" class="back-link">⬅ Terug naar mijn logboek</a>
+
+    <div class="movie-detail-container">
+        <div class="movie-poster">
+            <img src="{{ movie.Poster if movie.Poster != 'N/A' else 'https://via.placeholder.com/300x450?text=Geen+Poster' }}"
+                alt="{{ movie.Title }}">
+        </div>
+
+        <div class="movie-info">
+            <h1>{{ movie.Title }}</h1>
+            <p>
+                <span class="meta-tag">📅 {{ movie.Year }}</span>
+                <span class="meta-tag">⏳ {{ movie.Runtime }}</span>
+                <span class="meta-tag">⭐ IMDb: {{ movie.imdbRating }}</span>
+            </p>
+
+            <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+            <p><strong>Regisseur:</strong> {{ movie.Director }}</p>
+
+            <p><strong>Cast:</strong> {{ movie.Actors }}</p>
+
+            <p><strong>Plot:</strong> {{ movie.Plot }}</p>
+
+            <div class="rating-box">
+                <h3>Sla deze film op in je CineLog</h3>
+                <form action="/save" method="POST">
+                    <!-- Verborgen velden -->
+                    <input type="hidden" name="imdb_id" value="{{ movie.imdbID }}">
+                    <input type="hidden" name="title" value="{{ movie.Title }}">
+                    <input type="hidden" name="year" value="{{ movie.Year }}">
+                    <input type="hidden" name="runtime" value="{{ movie.Runtime }}">
+                    <input type="hidden" name="poster" value="{{ movie.Poster }}">
+
+                    <!-- Het Datumveld (Nieuw) -->
+                    <label for="date_watched">Wanneer heb je deze film bekeken?</label>
+                    <input type="date" id="date_watched" name="date_watched" required>
+
+                    <label for="my_rating" style="margin-top: 15px;">Jouw Waardering (1 t/m 5 sterren):</label>
+                    <select name="my_rating" id="my_rating" required>
+                        <option value="5">⭐⭐⭐⭐⭐ (Geweldig)</option>
+                        <option value="4">⭐⭐⭐⭐ (Goed)</option>
+                        <option value="3" selected>⭐⭐⭐ (Voldoende)</option>
+                        <option value="2">⭐⭐ (Matig)</option>
+                        <option value="1">⭐ (Slecht)</option>
+                    </select>
+
+                    <button type="submit" style="margin-top: 20px; width: 100%;">Film opslaan en loggen</button>
+                </form>
+
+                <script>
+                    // Dit kleine stukje JS zorgt ervoor dat het datumveld automatisch op VANDAAG staat ingesteld
+                    document.getElementById('date_watched').valueAsDate = new Date();
+                </script>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
